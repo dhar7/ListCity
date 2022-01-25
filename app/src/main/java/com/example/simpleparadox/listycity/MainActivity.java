@@ -16,6 +16,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import android.content.Intent;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout nameField;
     ArrayAdapter<String> cityAdapter;
     ArrayList<String> dataList;
+
+    String parameterToPass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
         cityList = findViewById(R.id.city_list);
 
-        //String []cities ={"Edmonton", "Vancouver", "Moscow", "Sydney", "Berlin", "Vienna", "Tokyo", "Beijing", "Osaka", "New Delhi"};
+        String []cities ={"Edmonton", "Vancouver", "Moscow", "Sydney", "Berlin", "Vienna", "Tokyo", "Beijing", "Osaka", "New Delhi"};
 
         dataList = new ArrayList<>();
 
@@ -46,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         cityList.setAdapter(cityAdapter);
+
+
 
         final Button addButton = findViewById(R.id.button_add);
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -58,9 +63,20 @@ public class MainActivity extends AppCompatActivity {
         confirmButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 String cityName = newName.getText().toString();
+                parameterToPass = cityName;
                 cityAdapter.add(cityName);
                 newName.getText().clear();
                 nameField.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        cityList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String name = (String) adapterView.getItemAtPosition(i);
+                Intent intent = new Intent(MainActivity.this, ShowActivity.class);
+                intent.putExtra("city",name);
+                startActivity(intent);
             }
         });
 
